@@ -401,7 +401,7 @@ header h1 {
   overflow: hidden;
 }
 
-/
+
 .todo-input:focus,
 .todo-btn:hover {
   box-shadow: var(--glow);
