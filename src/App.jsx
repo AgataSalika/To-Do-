@@ -5,6 +5,8 @@ import "./App.css";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [search, setSearch] = useState("");
+  const [showToDos, setShowToDos] = useState(todos);
 
   const addTask = (userInput) => {
     if (
@@ -17,11 +19,13 @@ function App() {
         complete: false,
       };
       setTodos([...todos, newItem]);
+      setShowToDos([...todos, newItem]);
     }
   };
 
   const removeTask = (id) => {
     setTodos([...todos.filter((todo) => todo.id !== id)]);
+    setShowToDos([...todos.filter((todo) => todo.id !== id)]);
   };
   // если id текущей задачи (todo) не равен тому id, кот мы передали в функцию, то мы эту задачу добавляем в новый (результирующий) массив
   const handleToggle = (id) => {
@@ -30,6 +34,12 @@ function App() {
         todo.id === id ? { ...todo, complete: !todo.complete } : { ...todo },
       ),
     ]);
+
+    setShowToDos([
+      ...todos.map((todo) =>
+        todo.id === id ? { ...todo, complete: !todo.complete } : { ...todo },
+      )
+    ])
   };
 
   return (
@@ -41,9 +51,25 @@ function App() {
         </header>
 
         <ToDoForm addTask={addTask} />
+
+        <form>
+          <input
+            onChange={function (event) {
+              setSearch(event.target.value);
+
+              let filteredToDos = todos.filter((todo) => {
+                return todo.task.includes(event.target.value);  
+                 
+              })
+               console.log(filteredToDos);
+               setShowToDos(filteredToDos)
+            }}
+            placeholder="Поиск"
+            value={search}
+          ></input>
+        </form>
         <div className="tasks">
-          {todos.map((todo, index) => {
-            console.log(todo, index);
+          {showToDos.map((todo, index) => {
             return (
               <ToDo
                 index={index}
